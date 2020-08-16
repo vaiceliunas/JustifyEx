@@ -15,7 +15,7 @@ namespace JustifyEx
         // fontName - "Times New Roman", Arial, etc.
         // fontSize - 12, 14, etc.
         // 
-        public static List<string> JustifyString(string data, double lineLength, string fontName, int fontSize, bool firstLineTablix)
+        public static List<string> JustifyString(string data, double lineLength, string fontName, int fontSize, bool firstLineIndent)
         {
             //might be not accurate
             double convRate = 25;
@@ -25,8 +25,8 @@ namespace JustifyEx
             var pdfGfx = PdfSharp.Drawing.XGraphics.FromPdfPage(pdfPage);
 
             double maxWidh = convRate * lineLength;
-            //19 spaces, first line tablix
-            string currentLine = firstLineTablix ? "" : "";
+            //19 spaces, first line Indent
+            string currentLine = firstLineIndent ? "" : "";
             double lengthWithNextWord = 0;
             var words = data.Split(' ');
             string tmpRes;
@@ -62,7 +62,7 @@ namespace JustifyEx
             {
                 //lengthWithNextWord = TextRenderer.MeasureText(currentLine + " " + words[i], new Font(fontName, fontSize)).Width;
 
-                lengthWithNextWord = CalculateStringWidth(currentLine + " " + words[i], pdfGfx, fontName, fontSize, (firstLineTablix && firstIteration));
+                lengthWithNextWord = CalculateStringWidth(currentLine + " " + words[i], pdfGfx, fontName, fontSize, (firstLineIndent && firstIteration));
 
                 if (lengthWithNextWord < maxWidh)
                 {
@@ -82,14 +82,14 @@ namespace JustifyEx
             for (int j = 0; j < dataList.Count - 1; j++)
             {
                 string strLine = dataList[j];
-                dataList[j] = JustifyLine(strLine, maxWidh, pdfGfx, fontName, fontSize, (firstLineTablix && firstIteration));
+                dataList[j] = JustifyLine(strLine, maxWidh, pdfGfx, fontName, fontSize, (firstLineIndent && firstIteration));
                 firstIteration = false;
             }
 
             return dataList;
         }
 
-        private static string JustifyLine(string data, double? maxWidh, XGraphics grahpics, string fontName, int fontSize, bool needsTablix)
+        private static string JustifyLine(string data, double? maxWidh, XGraphics grahpics, string fontName, int fontSize, bool needsIndent)
         {
             string newStr;
             double length;
@@ -111,7 +111,7 @@ namespace JustifyEx
                     if (newStr == result)
                         StringIsChanging = false;
 
-                    length = CalculateStringWidth(newStr, grahpics, fontName, fontSize, needsTablix);
+                    length = CalculateStringWidth(newStr, grahpics, fontName, fontSize, needsIndent);
                     if (length < maxWidh)
                     {
                         result = newStr;
@@ -126,7 +126,7 @@ namespace JustifyEx
                     if (newStr == result)
                         StringIsChanging = false;
 
-                    length = CalculateStringWidth(newStr, grahpics, fontName, fontSize, needsTablix);
+                    length = CalculateStringWidth(newStr, grahpics, fontName, fontSize, needsIndent);
                     if (length < maxWidh)
                     {
                         result = newStr;
@@ -142,7 +142,7 @@ namespace JustifyEx
             return result;
         }
 
-        private static double CalculateStringWidth(string line, XGraphics graphics, string fontName, int fontSize, bool needsTablix)
+        private static double CalculateStringWidth(string line, XGraphics graphics, string fontName, int fontSize, bool needsIndent)
         {
             string takeAllInBRegex = @"(<b>.*?<\/b>)";
 
@@ -176,7 +176,7 @@ namespace JustifyEx
             double regularLength = graphics.MeasureString(regularRes, regularFont).Width;
             double boldedLength = graphics.MeasureString(boldedRes, boldFont).Width;
 
-            totalLength = regularLength + boldedLength + regularResSpacesLength + (needsTablix ? 60 : 0);
+            totalLength = regularLength + boldedLength + regularResSpacesLength + (needsIndent ? 60 : 0);
 
             return totalLength;
         }
