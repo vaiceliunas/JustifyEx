@@ -15,7 +15,7 @@ namespace JustifyEx
         // fontName - "Times New Roman", Arial, etc.
         // fontSize - 12, 14, etc.
         // 
-        public static List<string> JustifyString(string data, double LineLength, string fontName, int fontSize, bool FirstLineTablix)
+        public static List<string> JustifyString(string data, double lineLength, string fontName, int fontSize, bool firstLineTablix)
         {
             //might be not accurate
             double convRate = 25;
@@ -24,9 +24,9 @@ namespace JustifyEx
             var pdfPage = pdfDoc.AddPage();
             var pdfGfx = PdfSharp.Drawing.XGraphics.FromPdfPage(pdfPage);
 
-            double maxWidh = convRate * LineLength;
+            double maxWidh = convRate * lineLength;
             //19 spaces, first line tablix
-            string currentLine = FirstLineTablix ? "" : "";
+            string currentLine = firstLineTablix ? "" : "";
             double lengthWithNextWord = 0;
             var words = data.Split(' ');
             string tmpRes;
@@ -62,7 +62,7 @@ namespace JustifyEx
             {
                 //lengthWithNextWord = TextRenderer.MeasureText(currentLine + " " + words[i], new Font(fontName, fontSize)).Width;
 
-                lengthWithNextWord = CalculateStringWidth(currentLine + " " + words[i], pdfGfx, fontName, fontSize, (FirstLineTablix && firstIteration));
+                lengthWithNextWord = CalculateStringWidth(currentLine + " " + words[i], pdfGfx, fontName, fontSize, (firstLineTablix && firstIteration));
 
                 if (lengthWithNextWord < maxWidh)
                 {
@@ -82,7 +82,7 @@ namespace JustifyEx
             for (int j = 0; j < dataList.Count - 1; j++)
             {
                 string strLine = dataList[j];
-                dataList[j] = JustifyLine(strLine, maxWidh, pdfGfx, fontName, fontSize, (FirstLineTablix && firstIteration));
+                dataList[j] = JustifyLine(strLine, maxWidh, pdfGfx, fontName, fontSize, (firstLineTablix && firstIteration));
                 firstIteration = false;
             }
 
