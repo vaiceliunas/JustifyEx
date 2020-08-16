@@ -15,7 +15,7 @@ namespace JustifyEx
         // fontName - "Times New Roman", Arial, etc.
         // fontSize - 12, 14, etc.
         // 
-        internal static List<string> JustifyString(string data, double LineLength, string fontName, int fontSize, bool FirstLineTablix)
+        public static List<string> JustifyString(string data, double LineLength, string fontName, int fontSize, bool FirstLineTablix)
         {
             //might be not accurate
             double convRate = 25;
@@ -89,7 +89,7 @@ namespace JustifyEx
             return dataList;
         }
 
-        internal static string JustifyLine(string data, double? maxWidh, XGraphics grahpics, string fontName, int fontSize, bool needsTablix)
+        private static string JustifyLine(string data, double? maxWidh, XGraphics grahpics, string fontName, int fontSize, bool needsTablix)
         {
             string newStr;
             double length;
@@ -142,7 +142,7 @@ namespace JustifyEx
             return result;
         }
 
-        internal static double CalculateStringWidth(string line, XGraphics graphics, string fontName, int fontSize, bool needsTablix)
+        private static double CalculateStringWidth(string line, XGraphics graphics, string fontName, int fontSize, bool needsTablix)
         {
             string takeAllInBRegex = @"(<b>.*?<\/b>)";
 
@@ -182,7 +182,7 @@ namespace JustifyEx
         }
 
         //jis iskart didina pirma, nes find ir replace jam gryzta 
-        internal static string ReplaceFirstOccurrence(string Source, string Find, string Replace)
+        private static string ReplaceFirstOccurrence(string Source, string Find, string Replace)
         {
             string result = Source;
             var pattern = @"[^ ][ ]{" + Find.Length + "}[^ ]";
@@ -197,7 +197,7 @@ namespace JustifyEx
             return result;
         }
 
-        internal static string ReplaceLastOccurrence(string Source, string Find, string Replace)
+        private static string ReplaceLastOccurrence(string Source, string Find, string Replace)
         {
             string result = Source;
             var pattern = @"[^ ][ ]{" + Find.Length + "}[^ ]";
